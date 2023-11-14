@@ -1,0 +1,258 @@
+{% load static %}
+{% load pwa %}
+{% pwa_meta_data %}
+{% pwa_meta_script %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    /**
+     * @license
+     * Copyright 2019 Google LLC. All Rights Reserved.
+     * SPDX-License-Identifier: Apache-2.0
+     */
+    /* 
+      * Always set the map height explicitly to define the size of the div element
+      * that contains the map. 
+      */
+    #map {
+      height: 100%;
+    }
+
+    /* 
+    * Optional: Makes the sample page fill the window. 
+    */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>EcoGuía</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Impact
+  * Updated: Sep 18 2023 with Bootstrap v5.3.2
+  * Template URL: https://bootstrapmade.com/impact-bootstrap-business-website-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <section id="topbar" class="topbar d-flex align-items-center">
+    <div class="container d-flex justify-content-center justify-content-md-between">
+      <div class="contact-info d-flex align-items-center">
+        <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">info@ecoguia.com</a></i>
+        <i class="bi bi-phone d-flex align-items-center ms-4"><span>+52 464 102 6380</span></i>
+      </div>
+      <div class="social-links d-none d-md-flex align-items-center">
+        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+     
+      </div>
+    </div>
+  </section><!-- End Top Bar -->
+
+  <header id="header" class="header d-flex align-items-center">
+
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1>EcoGuía<span>.</span></h1>
+      </a>
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="#">Mapa</a></li>
+          <li><a href="{% url 'about' %}">Acerca de</a></li>
+          <li><a href="{% url 'contact' %}">Contacto</a></li>
+         
+    
+       
+        </ul>
+      </nav><!-- .navbar -->
+
+      <i class="mobile-nav-toggle mobile-nav-show bi bi-list"></i>
+      <i class="mobile-nav-toggle mobile-nav-hide d-none bi bi-x"></i>
+
+    </div>
+  </header><!-- End Header -->
+  <!-- End Header -->
+
+
+<script>
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 10,
+        mapId: "75f474a0b093fe3b",
+        center: { lat: 19.428755, lng: -99.136972 },
+      });
+
+      setMarkers(map);
+    }
+
+    const places = [
+      ["Centro 7", 19.393496, -99.187126, 7],
+      ["Centro 6", 19.375914, -99.141086, 6],
+      ["Centro 5", 19.424234, -99.134701, 5],
+      ["Centro 4", 19.421854, -99.135963, 4],
+      ["Centro 3", 19.425126, -99.144669, 3],
+      ["Centro 2", 19.429410, -99.153249, 2],
+      ["Centro 1", 19.421021, -99.113567, 1],
+    ];
+
+    const markers = [];
+
+    function setMarkers(map) {
+      const image = {
+        url: "{% static 'img/compost.png' %}",
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 32),
+      };
+
+      const shape = {
+        coords: [1, 1, 1, 20, 18, 20, 18, 1],
+        type: "poly",
+      };
+
+      for (let i = 0; i < places.length; i++) {
+        const place = places[i];
+        const marker = new google.maps.Marker({
+          position: { lat: place[1], lng: place[2] },
+          map,
+          icon: image,
+          shape: shape,
+          title: place[0],
+          zIndex: place[3],
+        });
+
+        markers.push(marker);
+
+        // Agregar evento click a cada marcador
+        marker.addListener('click', function() {
+          map.setZoom(15, { duration: 500 }); // Establece el nivel de zoom deseado y duración de animación
+          map.setCenter(marker.getPosition()); // Centra el mapa en la posición del marcador
+        });
+      }
+    }
+
+    window.initMap = initMap;
+</script>
+
+<div id="map"></div>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxg34JqfaTuYtSao3gFzEpM5B18kGlRsw&callback=initMap&v=weekly"
+  defer
+></script>
+
+    
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+  <div class="container">
+    <div class="row gy-4">
+      <div class="col-lg-5 col-md-12 footer-info">
+        <a href="index.html" class="logo d-flex align-items-center">
+          <span>EcoGuía</span>
+        </a>
+        <p>Guiando juntos hacia un mundo más verde. Nuestra misión es fomentar la sostenibilidad y el reciclaje para un planeta más limpio y saludable.</p>
+        <div class="social-links d-flex mt-4">
+          <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+          
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-6 footer-links">
+        <h4>Enlaces Útiles</h4>
+        <ul>
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#">Acerca de nosotros</a></li>
+          <li><a href="#">Servicios</a></li>
+          <li><a href="#">Términos de servicio</a></li>
+          <li><a href="#">Política de privacidad</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-2 col-6 footer-links">
+        <h4>Nuestros Servicios</h4>
+        <ul>
+          <li><a href="#">Reciclaje de Residuos</a></li>
+          <li><a href="#">Educación Ambiental</a></li>
+          <li><a href="#">Consultoría en Sostenibilidad</a></li>
+          <li><a href="#">Programas de Recogida de Basura</a></li>
+          <li><a href="#">Desarrollo de Comunidades Verdes</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+        <h4>Contacto</h4>
+        <p>
+          Dirección: C. Rafael Ángel de la Peña 146<br>
+          Ciudad de México, México, 06800<br>
+          <strong>Teléfono:</strong> +52 464 102 6380<br>
+          <strong>Correo electrónico:</strong> info@ecoguia.com<br>
+        </p>
+      </div>
+    </div>
+  </div>
+
+ 
+</footer><!-- Fin del Footer -->
+<!-- Fin del Footer -->
+
+
+  
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>
